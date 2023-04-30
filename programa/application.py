@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Configuración ventana
 root = Tk()
@@ -25,8 +26,17 @@ def abrir_csv():
     # Mostrar los primeros 5 registros del archivo CSV (por consola)
     print(data.head())
 
-    # Mostrar los gráficos
-    plt.show()
+    # Crear un gráfico de barras con la columna "Cantidad" del archivo CSV
+    fig = plt.figure(figsize=(6, 4))
+    data.plot.bar(x="cantidad", y="precio", ax=fig.add_subplot(111))
+    plt.tight_layout()
+
+    # Crear un objeto FigureCanvasTkAgg con el gráfico de barras y la ventana de Tkinter
+    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas.draw()
+
+    # Mostrar el objeto FigureCanvasTkAgg en la ventana de Tkinter
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 
 
 file_menu = Menu(menubar, tearoff=0)
