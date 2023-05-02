@@ -21,22 +21,22 @@ def abrir_csv():
     filename = filedialog.askopenfilename(title="Seleccione un archivo CSV", filetypes=[("CSV Files", "*.csv")])
 
     # Leer el archivo CSV
-    data = pd.read_csv(filename)
+    data = pd.read_csv(filename, delimiter=";")
 
-    # Mostrar los primeros 5 registros del archivo CSV (por consola)
-    print(data.head())
+    # Contar incidencias por estado
+    incidencias_por_estado = data.groupby("Estado").size()
 
-    # Crear un gráfico de barras con la columna "Cantidad" del archivo CSV
-    fig = plt.figure(figsize=(6, 4))
-    data.plot.bar(x="cantidad", y="precio", ax=fig.add_subplot(111))
-    plt.tight_layout()
+    # Crear gráfico de barras
+    fig, ax = plt.subplots()
+    incidencias_por_estado.plot(kind="bar", ax=ax)
+    ax.set_xlabel("Estado")
+    ax.set_ylabel("Número de incidencias")
+    ax.set_title("Incidencias por estado")
 
-    # Crear un objeto FigureCanvasTkAgg con el gráfico de barras y la ventana de Tkinter
+    # Crear objeto FigureCanvasTkAgg
     canvas = FigureCanvasTkAgg(fig, master=root)
     canvas.draw()
-
-    # Mostrar el objeto FigureCanvasTkAgg en la ventana de Tkinter
-    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+    canvas.get_tk_widget().pack()
 
 
 file_menu = Menu(menubar, tearoff=0)
