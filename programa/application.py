@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import filedialog
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import tkinter.ttk as ttk
+from reportlab.lib.pagesizes import letter
 
 # Configuración ventana
 root = Tk()
@@ -23,26 +23,30 @@ def abrir_csv():
     # Leer el archivo CSV
     data = pd.read_csv(filename, delimiter=";")
 
-    # Contar incidencias por estado
-    incidencias_por_estado = data.groupby("Estado").size()
+    # Crear la tabla
+    table = ttk.Treeview(root, columns=tuple(data.columns))
 
-    # Crear gráfico de barras
-    fig, ax = plt.subplots()
-    incidencias_por_estado.plot(kind="bar", ax=ax)
-    ax.set_xlabel("Estado")
-    ax.set_ylabel("Número de incidencias")
-    ax.set_title("Incidencias por estado")
+    # Agregar encabezados de columna
+    for column in data.columns:
+        table.heading(column, text=column)
 
-    # Crear objeto FigureCanvasTkAgg
-    canvas = FigureCanvasTkAgg(fig, master=root)
-    canvas.draw()
-    canvas.get_tk_widget().pack()
+    # Agregar datos a la tabla
+    for i, row in data.iterrows():
+        table.insert("", "end", text=i, values=tuple(row))
+
+    # Mostrar la tabla
+    titulo = Label(root, text="Tabla de Incidencias", font=("Arial", 14))
+    table.
+    titulo.pack()
+    table.pack()
+
 
 
 file_menu = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Archivo", menu=file_menu)
 
 file_menu.add_command(label="Abrir", command=abrir_csv)
+file_menu.add_command(label="Guardar")
 file_menu.add_separator()
 file_menu.add_command(label="Salir", command=root.quit)
 
