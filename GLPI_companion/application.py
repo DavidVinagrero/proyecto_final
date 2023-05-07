@@ -1,16 +1,25 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QMainWindow, QAction, qApp, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QMainWindow, QAction, qApp, QFileDialog, \
+    QGridLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
 import random
+
+csv = ""
 
 
 class App(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GLPI Companion")
-        self.setGeometry(0, 0, 1000, 1000)
+        self.setGeometry(100, 100, 1000, 1000)
+
+        # Creación del widget principal y el layout
+        main_widget = QWidget(self)
+        self.setCentralWidget(main_widget)
+        layout = QGridLayout(main_widget)
+        main_widget.setLayout(layout)
 
         # Crear acciones para el menú
         openAct = QAction("Abrir", self)
